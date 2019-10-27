@@ -20,24 +20,32 @@ enum HLVMOpSet{
 };
 struct HLVMCode{
     u8 operator;
-    u32 operand;
+    s32 operand;
 };
+typedef enum
+{
+    HLVM_STATE_IDLE,HLVM_STATE_RUNNING,HLVM_STATE_HALT,HLVM_STATE_SLEEPING,HLVM_STATE_ERROR
+}HLVM_STATE;
+typedef enum
+{
+    HLVM_OK,HLVM_INSTRUCTION_NOT_EXIST, HLVM_PC_OUT_RANGE,HLVM_SP_OUT_RANGE,HLVM_PARA_OUT_RANGE,HLVM_INT_NOT_EXIST,HLVM_DIV_BY_ZERO,HLVM_HALT
+}HLVM_RET;
+
+
 #define MEM_SIZE  100
 #define STACK_SIZE 20
+#define INTERRUPT_SIZE 10
 struct HLVM{
-    u32 reg;
+    struct HLVMCode _mems[MEM_SIZE];
+    u32 _stack[STACK_SIZE];
+    void* _interrupts[INTERRUPT_SIZE]; /*exec pointer*/
+    s32 reg;
     u32 ticks;
     u32 pc;
     u32 sp;
-    struct HLVMCode _mems[MEM_SIZE];
-    u32 _stack[STACK_SIZE];
+    HLVM_STATE state;
+    u32 _sleeping;
 };
-
-typedef enum
-{
-    HLVM_OK,HLVM_INSTRUCTION_NOT_EXIST, HLVM_MEM_OVERFLOW,HLVM_STACK_OVERFLOW,HLVM_INT_NOT_EXIST,HLVM_DIV_BY_ZERO,HLVM_HALT
-}HLVM_RET;
-
 typedef HLVM_RET (*HLVMExec)(struct HLVM* vm);
 
 void hl_vm_init(struct HLVM *vm);

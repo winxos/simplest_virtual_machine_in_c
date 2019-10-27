@@ -7,6 +7,7 @@
 
 typedef unsigned char u8;
 typedef unsigned int u32;
+typedef          int s32;
 typedef u8 bool;
 #ifndef NULL
 #define NULL 0
