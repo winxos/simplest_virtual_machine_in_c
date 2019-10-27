@@ -1,6 +1,6 @@
 #include <stdio.h>
-
+#include "hl_vm_test.h"
 int main() {
-    printf("Hello, World!\n");
+    hl_vm_test();
     return 0;
 }
