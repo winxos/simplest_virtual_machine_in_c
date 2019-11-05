@@ -28,20 +28,3 @@ void hl_vm_dump(struct HLVM *vm) {
     }
     puts("\n");
 }
-void hl_vm_rom_show(struct HLVM *vm) {
-    int i;
-    puts("[ROM]");
-    for (i = 0; i < COLS; i++)
-    {
-        printf(TITLE_FORMAT, i);
-    }
-    for (i = 0; i < MEM_SIZE; i++)
-    {
-        if (i % COLS == 0)
-        {
-            printf(COL_HEADER_FORMAT, i / COLS*10);
-        }
-        printf(DATA_FORMAT,vm->_rom[i]);
-    }
-    puts("\n");
-}

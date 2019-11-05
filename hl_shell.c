@@ -32,7 +32,7 @@ void hl_vm_input(struct HLVM *vm)
             break;
         }
         printf("(%03d) 0x%02x%06x\n",i,op,opd); /*echo to user*/
-        vm->_rom[i]=(op<<24)|opd; /*op(8bit) operand(24bit)*/
+        vm->_mems[i]= (op << 24) | opd; /*op(8bit) operand(24bit)*/
         i++;
     }
     puts("input finished.");
@@ -42,11 +42,10 @@ void hl_shell_menu()
     printf("\tHLVM v%04x\n",HLVM_VER);
     puts("type [command] to use.");
     puts("1. [vm] input code manual");
-    puts("2. [rom] view rom");
-    puts("3. [ram] view ram");
-    puts("4. [run] run vm");
-    puts("5. [ls] list .vm code");
-    puts("6. [load xx] load xx.vm");
+    puts("2. [ram] view ram");
+    puts("3. [run] run vm");
+    puts("4. [ls] list .vm code");
+    puts("5. [load xx] load xx.vm");
     puts("");
 
 }
@@ -66,10 +65,6 @@ void hl_shell_main()
         {
             break;
         }
-        if(strcmp(op,"rom")==0)
-        {
-            hl_vm_rom_show(&vm);
-        }
         else if(strcmp(op,"ram")==0)
         {
             hl_vm_dump(&vm);
@@ -85,10 +80,10 @@ void hl_shell_main()
             {
                 system("cls");
                 printf("STEP %6ld\n",vm.ticks);
-                printf("PC->>%08x<<-\n",vm._rom[vm.pc]);
+                printf("PC->>%08x<<-\n",vm._mems[vm.pc]);
                 hl_vm_dump(&vm);
                 fflush(stdout);
-                usleep(1000000); /*1ms*/
+                usleep(100000); /*1ms*/
             }
             puts("HALTED.\n");
         }
@@ -123,7 +118,7 @@ void hl_shell_main()
                         break;
                     }
                     printf("(%03d) < 0x%02x%06x\n",i,a,b); /*echo to user*/
-                    vm._rom[i]=(a<<24)|b; /*op(8bit) operand(24bit)*/
+                    vm._mems[i]= (a << 24) | b; /*op(8bit) operand(24bit)*/
                     i++;
                 }
             }
