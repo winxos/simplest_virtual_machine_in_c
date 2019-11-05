@@ -20,7 +20,7 @@ enum HLVMOpSet{
 };
 struct HLVMCode{
     u8 operator;
-    s32 operand;
+    u32 operand;
 };
 typedef enum
 {
@@ -33,18 +33,20 @@ typedef enum
 
 
 #define MEM_SIZE  100
-#define STACK_SIZE 20
+#define ROM_SIZE  100
 #define INTERRUPT_SIZE 10
+#define STACK_SIZE 20
 struct HLVM{
-    struct HLVMCode _mems[MEM_SIZE];
-    u32 _stack[STACK_SIZE];
-    void* _interrupts[INTERRUPT_SIZE]; /*exec pointer*/
+    struct HLVMCode _rom[ROM_SIZE];/*for code*/
+    u32 _mems[MEM_SIZE];/*memories*/
+    void* _interrupts[INTERRUPT_SIZE]; /*soft interrupt*/
     s32 reg;
-    u32 ticks;
-    u32 pc;
-    u32 sp;
-    HLVM_STATE state;
+    u32 pc;/*program counter*/
+    u32 sp;/*stack pointer*/
+    u32 lr;/*link reg*/
+    u32 ticks;/*cpu time*/
     u32 _sleeping;
+    HLVM_STATE state;
 };
 typedef HLVM_RET (*HLVMExec)(struct HLVM* vm);
 
