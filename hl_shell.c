@@ -84,13 +84,13 @@ void hl_shell_main()
             while(hl_vm_step(&vm)==HLVM_OK)
             {
                 system("cls");
-                printf("step %6ld\n",vm.ticks);
-                printf("->>%08x<<-\n",vm._rom[vm.pc]);
+                printf("STEP %6ld\n",vm.ticks);
+                printf("PC->>%08x<<-\n",vm._rom[vm.pc]);
                 hl_vm_dump(&vm);
                 fflush(stdout);
                 usleep(1000000); /*1ms*/
             }
-            puts("\thalt.");
+            puts("HALTED.\n");
         }
         else if(strcmp(op,"ls")==0)
         {
@@ -105,7 +105,7 @@ void hl_shell_main()
             op2[len+3]=0;
             FILE *pf=fopen(op2,"r");
             if(pf == NULL){
-                printf("文件 %s 打开错误", op2);
+                printf("file %s open failed", op2);
                 continue;
             }
             char buf[30];
