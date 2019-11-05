@@ -9,11 +9,11 @@
 #define TITLE_FORMAT "%10X"
 #define DATA_FORMAT "  %08x"
 #define COL_HEADER_FORMAT "\n%02d:"
-#define REG_FMT "REG:%08d\tPC:%02d\tSP:%02d\tLR:%02d\tTICKS:%ld\n"
+#define REG_FMT "REG:%08d\tPC:%02d\tSP:%02d\tLR:%02d\tTICKS:%ld\tSTATE:%d\n"
 void hl_vm_dump(struct HLVM *vm) {
     int i;
     puts("RAM:");
-    printf(REG_FMT,vm->reg,vm->pc,vm->sp,vm->lr,vm->ticks);
+    printf(REG_FMT,vm->reg,vm->pc,vm->sp,vm->lr,vm->ticks,vm->state);
     for (i = 0; i < COLS; i++)
     {
         printf(TITLE_FORMAT, i);

@@ -19,12 +19,14 @@ HLVM_RET hl_vm_step(struct HLVM *vm) {
             HLVMExec exec= _op_tables[GET_OP(vm->_rom[vm->pc])];
             if(exec==NULL)
             {
+                vm->state=HLVM_STATE_ERROR;
                 return HLVM_INSTRUCTION_NOT_EXIST;
             }
             HLVM_RET ret=exec(vm);
             vm->pc++;
             if(vm->pc>=ROM_SIZE)
             {
+                vm->state=HLVM_STATE_ERROR;
                 return HLVM_PC_OUT_RANGE;
             }
             break;
@@ -48,6 +50,6 @@ bool hl_vm__core_test() {
 }
 
 void hl_vm_init(struct HLVM *vm) {
-    memset(vm,0, sizeof(vm));
+    memset(vm,0, sizeof(struct HLVM));
     vm->sp=MEM_SIZE-1;
 }

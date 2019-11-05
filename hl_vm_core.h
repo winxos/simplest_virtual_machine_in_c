@@ -6,7 +6,7 @@
 #define HLVM_HL_VM_CORE_H
 
 #include "typedef.h"
-
+#define HLVM_VER 0x0103
 enum HLVMInt{
     HL_INT_UART_TX,HL_INT_DWIO,HL_INT_DCMOTOR,HL_INT_STEPPER
 };
