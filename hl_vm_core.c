@@ -16,7 +16,7 @@ HLVM_RET hl_vm_step(struct HLVM *vm) {
             break;
         case HLVM_STATE_RUNNING:
             vm->ticks++;
-            HLVMExec exec= _op_tables[vm->_rom[vm->pc].operator];
+            HLVMExec exec= _op_tables[GET_OP(vm->_rom[vm->pc])];
             if(exec==NULL)
             {
                 return HLVM_INSTRUCTION_NOT_EXIST;
@@ -40,9 +40,14 @@ HLVM_RET hl_vm_step(struct HLVM *vm) {
 }
 
 bool hl_vm__core_test() {
-    struct HLVM vm={._rom={{0x03,3},{0x02,4},{0x03,3}},.sp=MEM_SIZE-1};
+    struct HLVM vm={._rom={0x03000022,0x04000004},.sp=MEM_SIZE-1};
     hl_vm_start(&vm);
     hl_vm_step(&vm);
     hl_vm_step(&vm);
     hl_vm_step(&vm);
+}
+
+void hl_vm_init(struct HLVM *vm) {
+    memset(vm,0, sizeof(vm));
+    vm->sp=MEM_SIZE-1;
 }

@@ -10,10 +10,6 @@
 enum HLVMInt{
     HL_INT_UART_TX,HL_INT_DWIO,HL_INT_DCMOTOR,HL_INT_STEPPER
 };
-struct HLVMCode{
-    u8 operator;
-    u32 operand;
-};
 typedef enum
 {
     HLVM_STATE_IDLE,HLVM_STATE_RUNNING,HLVM_STATE_HALT,HLVM_STATE_SLEEPING,HLVM_STATE_ERROR
@@ -29,7 +25,7 @@ typedef enum
 #define INTERRUPT_SIZE 10
 #define STACK_SIZE 20
 struct HLVM{
-    struct HLVMCode _rom[ROM_SIZE];/*for code*/
+    u32 _rom[ROM_SIZE];/*for code*/
     u32 _mems[MEM_SIZE];/*memories*/
     void* _interrupts[INTERRUPT_SIZE]; /*soft interrupt*/
     s32 reg;
@@ -40,9 +36,12 @@ struct HLVM{
     u32 _sleeping;
     HLVM_STATE state;
 };
+#define GET_OP(n) ((n&0xff000000)>>24)
+#define GET_OPERAND(n) (n&0x00ffffff)
 typedef HLVM_RET (*HLVMExec)(struct HLVM* vm);
 
 void hl_vm_start(struct HLVM *vm);
+void hl_vm_init(struct HLVM *vm);
 HLVM_RET hl_vm_step(struct HLVM *vm);
 bool hl_vm__core_test();
 #endif //HLVM_HL_VM_CORE_H

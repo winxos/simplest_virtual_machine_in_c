@@ -1,5 +1,5 @@
 //
-// Created by zx on 2019/10/27.
+// Created by wvv on 2019/10/27.
 //
 
 #include "hl_shell.h"
@@ -16,20 +16,19 @@ void hl_shell_main()
     int i=0;
     int op,opd;
     struct HLVM vm;
-    memset(&vm,0, sizeof(vm));
+    hl_vm_init(&vm);
     while (1)
     {
-        printf("%03d?",i);
+        printf("%03d?",i);/*input hint*/
         char buf[40];
-        gets(buf);
-        int ret=sscanf(buf,"%x %x",&op,&opd);
-        if(ret!=2)
+        gets(buf);/*for robust input, line input*/
+        int ret=sscanf(buf,"%x %x",&op,&opd); /*if input valid, ret equal 2*/
+        if(ret!=2) /*input finished*/
         {
             break;
         }
-        printf("(%03d) 0x%02x %08x\n",i,op,opd);
-        vm._rom[i].operand=op;
-        vm._rom[i].operator=opd;
+        printf("(%03d) 0x%02x %08x\n",i,op,opd); /*echo to user*/
+        vm._rom[i]=(op<<24)|opd; /*op(8bit) operand(24bit)*/
         i++;
     }
     puts("input finished.");

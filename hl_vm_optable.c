@@ -5,7 +5,7 @@
 #include "hl_vm_optable.h"
 static inline HLVM_RET _ldr(struct HLVM *vm)
 {
-    s32 operand=vm->_rom[vm->pc].operand;
+    s32 operand=GET_OPERAND(vm->_rom[vm->pc]);
     if(operand>=MEM_SIZE || operand<0)
     {
         return HLVM_PC_OUT_RANGE;
@@ -15,7 +15,7 @@ static inline HLVM_RET _ldr(struct HLVM *vm)
 }
 static inline HLVM_RET _str(struct HLVM *vm)
 {
-    s32 operand=vm->_rom[vm->pc].operand;
+    s32 operand=GET_OPERAND(vm->_rom[vm->pc]);
     if(operand>=MEM_SIZE  || operand<0)
     {
         return HLVM_PC_OUT_RANGE;
@@ -25,12 +25,12 @@ static inline HLVM_RET _str(struct HLVM *vm)
 }
 static inline HLVM_RET _sreg(struct HLVM *vm)
 {
-    vm->reg=vm->_rom[vm->pc].operand;
+    vm->reg=GET_OPERAND(vm->_rom[vm->pc]);
     return HLVM_OK;
 }
 static inline HLVM_RET _b(struct HLVM *vm)
 {
-    s32 operand=vm->_rom[vm->pc].operand;
+    s32 operand=GET_OPERAND(vm->_rom[vm->pc]);
     if(operand>=ROM_SIZE  || operand<0)
     {
         return HLVM_PC_OUT_RANGE;
@@ -40,7 +40,7 @@ static inline HLVM_RET _b(struct HLVM *vm)
 }
 static inline HLVM_RET _bl(struct HLVM *vm)
 {
-    s32 operand=vm->_rom[vm->pc].operand;
+    s32 operand=GET_OPERAND(vm->_rom[vm->pc]);
     if(operand>=ROM_SIZE  || operand<0)
     {
         return HLVM_PC_OUT_RANGE;
@@ -51,7 +51,7 @@ static inline HLVM_RET _bl(struct HLVM *vm)
 }
 static inline HLVM_RET _bn(struct HLVM *vm)
 {
-    s32 operand=vm->_rom[vm->pc].operand;
+    s32 operand=GET_OPERAND(vm->_rom[vm->pc]);
     if(operand>=ROM_SIZE  || operand<0)
     {
         return HLVM_PC_OUT_RANGE;
@@ -63,7 +63,7 @@ static inline HLVM_RET _bn(struct HLVM *vm)
 }
 static inline HLVM_RET _bz(struct HLVM *vm)
 {
-    s32 operand=vm->_rom[vm->pc].operand;
+    s32 operand=GET_OPERAND(vm->_rom[vm->pc]);
     if(operand>=ROM_SIZE  || operand<0)
     {
         return HLVM_PC_OUT_RANGE;
@@ -75,7 +75,7 @@ static inline HLVM_RET _bz(struct HLVM *vm)
 }
 static inline HLVM_RET _int(struct HLVM *vm)
 {
-    s32 operand=vm->_rom[vm->pc].operand;
+    s32 operand=GET_OPERAND(vm->_rom[vm->pc]);
     if(operand>=INTERRUPT_SIZE  || operand<0)
     {
         return HLVM_PARA_OUT_RANGE;
@@ -111,7 +111,7 @@ static inline HLVM_RET _pop(struct HLVM *vm)
 }
 static inline HLVM_RET _slp(struct HLVM *vm)
 {
-    s32 operand=vm->_rom[vm->pc].operand;
+    s32 operand=GET_OPERAND(vm->_rom[vm->pc]);
     if(operand<0)
     {
         return HLVM_PARA_OUT_RANGE;
@@ -129,67 +129,67 @@ static inline HLVM_RET _slp(struct HLVM *vm)
 }
 static inline HLVM_RET _add(struct HLVM *vm)
 {
-    s32 operand=vm->_rom[vm->pc].operand;
+    s32 operand=GET_OPERAND(vm->_rom[vm->pc]);
     vm->reg+=operand;
     return HLVM_OK;
 }
 static inline HLVM_RET _sub(struct HLVM *vm)
 {
-    s32 operand=vm->_rom[vm->pc].operand;
+    s32 operand=GET_OPERAND(vm->_rom[vm->pc]);
     vm->reg-=operand;
     return HLVM_OK;
 }
 static inline HLVM_RET _mul(struct HLVM *vm)
 {
-    s32 operand=vm->_rom[vm->pc].operand;
+    s32 operand=GET_OPERAND(vm->_rom[vm->pc]);
     vm->reg*=operand;
     return HLVM_OK;
 }
 static inline HLVM_RET _div(struct HLVM *vm)
 {
-    s32 operand=vm->_rom[vm->pc].operand;
+    s32 operand=GET_OPERAND(vm->_rom[vm->pc]);
     vm->reg/=operand;
     return HLVM_OK;
 }
 static inline HLVM_RET _mod(struct HLVM *vm)
 {
-    s32 operand=vm->_rom[vm->pc].operand;
+    s32 operand=GET_OPERAND(vm->_rom[vm->pc]);
     vm->reg%=operand;
     return HLVM_OK;
 }
 static inline HLVM_RET _inc(struct HLVM *vm)
 {
-    s32 operand=vm->_rom[vm->pc].operand;
+    s32 operand=GET_OPERAND(vm->_rom[vm->pc]);
     vm->reg++;
     return HLVM_OK;
 }
 static inline HLVM_RET _dec(struct HLVM *vm)
 {
-    s32 operand=vm->_rom[vm->pc].operand;
+    s32 operand=GET_OPERAND(vm->_rom[vm->pc]);
     vm->reg--;
     return HLVM_OK;
 }
 static inline HLVM_RET _neg(struct HLVM *vm)
 {
-    s32 operand=vm->_rom[vm->pc].operand;
+    s32 operand=GET_OPERAND(vm->_rom[vm->pc]);
     vm->reg=-vm->reg;
     return HLVM_OK;
 }
 static inline HLVM_RET _and(struct HLVM *vm)
 {
-    s32 operand=vm->_rom[vm->pc].operand;
+    s32 operand=GET_OPERAND(vm->_rom[vm->pc]);
     vm->reg=vm->reg&operand;
     return HLVM_OK;
 }
 static inline HLVM_RET _or(struct HLVM *vm)
 {
-    s32 operand=vm->_rom[vm->pc].operand;
+    s32 operand=GET_OPERAND(vm->_rom[vm->pc]);
     vm->reg=vm->reg|operand;
     return HLVM_OK;
 }
 static inline HLVM_RET _xor(struct HLVM *vm)
 {
-    s32 operand=vm->_rom[vm->pc].operand;
+    s32 operand=GET_OPERAND(vm->_rom[vm->pc]);
     vm->reg=vm->reg^operand;
     return HLVM_OK;
 }

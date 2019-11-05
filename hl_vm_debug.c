@@ -8,14 +8,12 @@
 #define COLS 10
 #define TITLE_FORMAT "%10X"
 #define DATA_FORMAT "  %08x"
-#define CODE_FORMAT "  %02x%08x"
 #define COL_HEADER_FORMAT "\n%02d:"
-#define DUMP_HEADER_FMT "\nSYSTEM RUN %ld TICKS.\n"
-#define REG_FMT "REG:%08d\tPC:%02d\tSP:%02d\tLR:%02d\n"
+#define REG_FMT "REG:%08d\tPC:%02d\tSP:%02d\tLR:%02d\tTICKS:%ld\n"
 void hl_vm_dump(struct HLVM *vm) {
     int i;
-    printf(DUMP_HEADER_FMT,vm->ticks);
-    printf(REG_FMT,vm->reg,vm->pc,vm->sp,vm->lr);
+    puts("RAM:");
+    printf(REG_FMT,vm->reg,vm->pc,vm->sp,vm->lr,vm->ticks);
     for (i = 0; i < COLS; i++)
     {
         printf(TITLE_FORMAT, i);
@@ -32,10 +30,10 @@ void hl_vm_dump(struct HLVM *vm) {
 }
 void hl_vm_rom_show(struct HLVM *vm) {
     int i;
-    puts("CODES:");
+    puts("ROM:");
     for (i = 0; i < COLS; i++)
     {
-        printf("    "TITLE_FORMAT, i);
+        printf(TITLE_FORMAT, i);
     }
     for (i = 0; i < MEM_SIZE; i++)
     {
@@ -43,7 +41,7 @@ void hl_vm_rom_show(struct HLVM *vm) {
         {
             printf(COL_HEADER_FORMAT, i / COLS*10);
         }
-        printf(CODE_FORMAT,vm->_rom[i].operator,vm->_rom[i].operand);
+        printf(DATA_FORMAT,vm->_rom[i]);
     }
     puts("\n");
 }
