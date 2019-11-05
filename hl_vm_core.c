@@ -199,9 +199,6 @@ static HLVMExec _tables[]={
         NULL,_ldr,_str,_sreg,_add,_sub,_mul,_div,_mod,_inc,_dec,_neg,_and,_or,_xor,
         _b,_bl,_bz,_bn,_int,_halt,_push,_pop,_slp
 };
-void hl_vm_init(struct HLVM *vm) {
-    memset(vm,0, sizeof(struct HLVM));
-}
 void hl_vm_start(struct HLVM *vm){
     vm->state=HLVM_STATE_RUNNING;
 }

@@ -10,14 +10,6 @@
 enum HLVMInt{
     HL_INT_UART_TX,HL_INT_DWIO,HL_INT_DCMOTOR,HL_INT_STEPPER
 };
-enum HLVMOpSet{
-    LOAD_ = 0x20, STORE_, SREG_,
-    ADD_ = 0x30, SUB_, MUL_, DIV_, MOD_, INC_, DEC_, NEG_,
-    JMP_ = 0x40, JMPN_, JMPZ_,INT_, HALT_,
-    AND_ = 0x50, OR_, XOR_,
-    PUSH_ = 0x60, POP_,
-    SLP_ = 0x80,
-};
 struct HLVMCode{
     u8 operator;
     u32 operand;
@@ -50,7 +42,7 @@ struct HLVM{
 };
 typedef HLVM_RET (*HLVMExec)(struct HLVM* vm);
 
-void hl_vm_init(struct HLVM *vm);
+void hl_vm_start(struct HLVM *vm);
 HLVM_RET hl_vm_step(struct HLVM *vm);
 bool hl_vm__core_test();
 #endif //HLVM_HL_VM_CORE_H
