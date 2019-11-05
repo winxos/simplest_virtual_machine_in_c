@@ -83,9 +83,12 @@ void hl_shell_main()
             hl_vm_start(&vm);
             while(hl_vm_step(&vm)==HLVM_OK)
             {
-                printf("\rrunning %6ld",vm.ticks);
+                system("cls");
+                printf("step %6ld\n",vm.ticks);
+                printf("->>%08x<<-\n",vm._rom[vm.pc]);
+                hl_vm_dump(&vm);
                 fflush(stdout);
-                usleep(1000); /*1ms*/
+                usleep(1000000); /*1ms*/
             }
             puts("\thalt.");
         }
@@ -107,6 +110,7 @@ void hl_shell_main()
             }
             char buf[30];
             int i=0;
+            hl_vm_init(&vm);
             while(!feof(pf))
             {
                 char *p=fgets(buf,30,pf);
