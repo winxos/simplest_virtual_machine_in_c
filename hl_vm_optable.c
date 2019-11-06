@@ -129,52 +129,52 @@ static inline HLVM_RET _slp(struct HLVM *vm)
 }
 static inline HLVM_RET _add(struct HLVM *vm)
 {
-    u32 operand=GET_OPERAND(vm->_mems[vm->pc]);
-    if(operand>=MEM_SIZE)
+    if(vm->sp>=MEM_SIZE-1)
     {
-        return HLVM_PARA_OUT_RANGE;
+        return HLVM_SP_OUT_RANGE;
     }
-    vm->reg+=vm->_mems[operand];
+    vm->reg+=vm->_mems[vm->sp+1];
+    vm->sp++;
     return HLVM_OK;
 }
 static inline HLVM_RET _sub(struct HLVM *vm)
 {
-    u32 operand=GET_OPERAND(vm->_mems[vm->pc]);
-    if(operand>=MEM_SIZE)
+    if(vm->sp>=MEM_SIZE-1)
     {
-        return HLVM_PARA_OUT_RANGE;
+        return HLVM_SP_OUT_RANGE;
     }
-    vm->reg-=vm->_mems[operand];
+    vm->reg-=vm->_mems[vm->sp+1];
+    vm->sp++;
     return HLVM_OK;
 }
 static inline HLVM_RET _mul(struct HLVM *vm)
 {
-    u32 operand=GET_OPERAND(vm->_mems[vm->pc]);
-    if(operand>=MEM_SIZE)
+    if(vm->sp>=MEM_SIZE-1)
     {
-        return HLVM_PARA_OUT_RANGE;
+        return HLVM_SP_OUT_RANGE;
     }
-    vm->reg*=vm->_mems[operand];
+    vm->reg*=vm->_mems[vm->sp+1];
+    vm->sp++;
     return HLVM_OK;
 }
 static inline HLVM_RET _div(struct HLVM *vm)
 {
-    u32 operand=GET_OPERAND(vm->_mems[vm->pc]);
-    if(operand>=MEM_SIZE)
+    if(vm->sp>=MEM_SIZE-1)
     {
-        return HLVM_PARA_OUT_RANGE;
+        return HLVM_SP_OUT_RANGE;
     }
-    vm->reg/=vm->_mems[operand];
+    vm->reg/=vm->_mems[vm->sp+1];
+    vm->sp++;
     return HLVM_OK;
 }
 static inline HLVM_RET _mod(struct HLVM *vm)
 {
-    u32 operand=GET_OPERAND(vm->_mems[vm->pc]);
-    if(operand>=MEM_SIZE)
+    if(vm->sp>=MEM_SIZE-1)
     {
-        return HLVM_PARA_OUT_RANGE;
+        return HLVM_SP_OUT_RANGE;
     }
-    vm->reg%=vm->_mems[operand];
+    vm->reg%=vm->_mems[vm->sp+1];
+    vm->sp++;
     return HLVM_OK;
 }
 static inline HLVM_RET _inc(struct HLVM *vm)
@@ -194,20 +194,32 @@ static inline HLVM_RET _neg(struct HLVM *vm)
 }
 static inline HLVM_RET _and(struct HLVM *vm)
 {
-    u32 operand=GET_OPERAND(vm->_mems[vm->pc]);
-    vm->reg=vm->reg&vm->_mems[operand];
+    if(vm->sp>=MEM_SIZE-1)
+    {
+        return HLVM_SP_OUT_RANGE;
+    }
+    vm->reg&=vm->_mems[vm->sp+1];
+    vm->sp++;
     return HLVM_OK;
 }
 static inline HLVM_RET _or(struct HLVM *vm)
 {
-    u32 operand=GET_OPERAND(vm->_mems[vm->pc]);
-    vm->reg=vm->reg|vm->_mems[operand];
+    if(vm->sp>=MEM_SIZE-1)
+    {
+        return HLVM_SP_OUT_RANGE;
+    }
+    vm->reg|=vm->_mems[vm->sp+1];
+    vm->sp++;
     return HLVM_OK;
 }
 static inline HLVM_RET _xor(struct HLVM *vm)
 {
-    u32 operand=GET_OPERAND(vm->_mems[vm->pc]);
-    vm->reg=vm->reg^vm->_mems[operand];
+    if(vm->sp>=MEM_SIZE-1)
+    {
+        return HLVM_SP_OUT_RANGE;
+    }
+    vm->reg^=vm->_mems[vm->sp+1];
+    vm->sp++;
     return HLVM_OK;
 }
 static inline HLVM_RET _ret(struct HLVM *vm)
@@ -219,8 +231,15 @@ static inline HLVM_RET _ret(struct HLVM *vm)
     vm->pc=vm->lr;
     return HLVM_OK;
 }
+static inline HLVM_RET _lsp(struct HLVM *vm)
+{
+    u32 operand=GET_OPERAND(vm->_mems[vm->pc]);
+    vm->reg=vm->_mems[vm->sp+operand-1];
+    return HLVM_OK;
+}
 HLVMExec _op_tables[]={
         NULL,_ldr,_str,_sreg,_add,_sub,_mul,_div,
         _mod,_inc,_dec,_neg,_and,_or,_xor,_b,
-        _bl,_bz,_bn,_int,_halt,_push,_pop,_slp,_ret
+        _bl,_bz,_bn,_int,_halt,_push,_pop,_slp,_ret,
+        _lsp
 };

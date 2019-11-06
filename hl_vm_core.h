@@ -23,7 +23,7 @@ typedef enum
 #define MEM_SIZE  100
 #define ROM_SIZE  100
 #define INTERRUPT_SIZE 10
-#define STACK_SIZE 20
+#define STACK_SIZE 50
 struct HLVM{
     u32 _mems[MEM_SIZE];/*memories*/
     void* _interrupts[INTERRUPT_SIZE]; /*soft interrupt*/
