@@ -28,10 +28,10 @@ keywords = {
     "halt": 0x14,
     "push": 0x15,
     "pop": 0x16,
-    "halt": 0x17,
-
+    "slp": 0x17,
+    "ret": 0x18,
 };
-single_operators = {"inc", "dec", "halt", "push", "pop"}
+single_operators = {"inc", "dec", "halt", "push", "pop", "ret"}
 var_table = {}
 label_table = {}
 

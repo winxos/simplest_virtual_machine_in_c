@@ -45,7 +45,7 @@ static inline HLVM_RET _bl(struct HLVM *vm)
     {
         return HLVM_PC_OUT_RANGE;
     }
-    vm->lr=vm->pc+1;
+    vm->lr=vm->pc;
     vm->pc=operand-1;
     return HLVM_OK;
 }
@@ -210,7 +210,17 @@ static inline HLVM_RET _xor(struct HLVM *vm)
     vm->reg=vm->reg^vm->_mems[operand];
     return HLVM_OK;
 }
+static inline HLVM_RET _ret(struct HLVM *vm)
+{
+    if(vm->sp<MEM_SIZE-STACK_SIZE)
+    {
+        return HLVM_SP_OUT_RANGE;
+    }
+    vm->pc=vm->lr;
+    return HLVM_OK;
+}
 HLVMExec _op_tables[]={
-        NULL,_ldr,_str,_sreg,_add,_sub,_mul,_div,_mod,_inc,_dec,_neg,_and,_or,_xor,
-        _b,_bl,_bz,_bn,_int,_halt,_push,_pop,_slp
+        NULL,_ldr,_str,_sreg,_add,_sub,_mul,_div,
+        _mod,_inc,_dec,_neg,_and,_or,_xor,_b,
+        _bl,_bz,_bn,_int,_halt,_push,_pop,_slp,_ret
 };
