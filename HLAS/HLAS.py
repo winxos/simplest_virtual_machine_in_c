@@ -8,7 +8,7 @@ import sys
 keywords = {
     "ldr": 0x01,
     "str": 0x02,
-    "sreg": 0x03,
+    "ldri": 0x03,
     "add": 0x04,
     "sub": 0x05,
     "mul": 0x06,
@@ -30,7 +30,8 @@ keywords = {
     "pop": 0x16,
     "halt": 0x17,
 
-            };
+};
+single_operators = {"inc", "dec", "halt", "push", "pop"}
 var_table = {}
 label_table = {}
 
@@ -45,12 +46,12 @@ def pretranslate(src_code):
                     cmds.append("0")
                 if len(cmds) > 2:
                     if cmds[1] in var_table:
-                        print("[error] VAR %s ALREADY DEFINED." % cmds[1])
+                        print("[ERR] VAR %s ALREADY DEFINED." % cmds[1])
                         return
                     var_table[cmds[1]] = cmds[2]
             elif cmds[0].startswith("."):  # label
                 if cmds[0] in label_table:
-                    print("[error] LABEL %s ALREADY DEFINED." % cmds[0])
+                    print("[ERR] LABEL %s ALREADY DEFINED." % cmds[0])
                     return
                 label_table[cmds[0]] = len(after_code)
             elif cmds[0].startswith(";"):  # comment
@@ -58,7 +59,7 @@ def pretranslate(src_code):
             else:  # normal code
                 after_code.append(cmds)
 
-    for i, n in enumerate(var_table):
+    for i, n in enumerate(var_table):  # append variables to the end
         after_code.append(var_table[n])
         var_table[n] = len(after_code) - 1
     return after_code
@@ -68,7 +69,7 @@ def translate(codes):
     ml = []
     for index, code in enumerate(codes):
         if index >= len(codes) - len(var_table):
-            for i in (codes[-len(var_table):]):#the variables
+            for i in (codes[-len(var_table):]):  # the variables
                 ml.append(int(i))
             break
         operator = keywords[code[0]]
@@ -79,26 +80,25 @@ def translate(codes):
                 if label in label_table:
                     operand = label_table[label]
                 else:
-                    print("[error] LABEL %S NOT FOUND." % code[1])
-                    return;
+                    print("[ERR] LABEL %S NOT FOUND." % code[1])
+                    return
             else:
-                print("[waring] LINE % MISS LABEL." % index)
+                print("[ERR] LINE % MISS LABEL." % index)
+                return
         else:
             if len(code) > 1:
                 if code[1] in var_table:
                     operand = var_table[code[1]]
-                elif code[0] == "sreg" or code[0] == "slp":
+                elif code[0] == "ldri" or code[0] == "slp":
                     operand = int(code[1])
                 else:
-                    print("[error] VAR %s NOT FOUND." % code[1])
-                    return;
+                    print("[ERR] VAR %s NOT FOUND." % code[1])
+                    return
             else:
-                if code[0] == "halt" or code[0] == "push" or code[0] == "pop" \
-                    or code[0] == "inc" or code[0] == "dec":
-                    pass
-                else:
-                    print("[waring] LINE %d MISS OPERAND." % index)
-        ml.append((operator<<24) + operand)
+                if code[0] not in single_operators:  # single operand
+                    print("[ERR] LINE %d MISS OPERAND." % index)
+                    return
+        ml.append((operator << 24) + operand)
     return ml
 
 
@@ -106,17 +106,17 @@ def deal_sal(n):
     fn = str(n).split(".")[0] + ".vm"
     try:
         with open(n) as fi, open(fn, "w") as fo:
-            c=translate(pretranslate(fi.read().split("\n")))
+            c = translate(pretranslate(fi.read().split("\n")))
             for i in c:
-                #fo.write("%08x\n"%i)
-                fo.write("%x %x\n"%(i>>24,i&0x00ffffff))
+                # fo.write("%08x\n"%i)
+                fo.write("%x %x\n" % (i >> 24, i & 0x00ffffff))
             print("[success] ASSEMBLY FILE %s TO %s" % (n, fn))
     except IOError as e:
         print("[error] %s" % str(e))
 
 
 def console():
-    print("HLVM ASSEMBLY TOOL")
+    print("HLVM ASSEMBLY TOOL v1.2")
     print("\t\twinxos 20191105")
     print("\n")
     print("ls\t\t[list *.as]")
@@ -128,7 +128,7 @@ def console():
         if cmds[0] == "ls":
             print("\n".join(glob.glob(r"*.as")))
         if cmds[0] == "as":
-            deal_sal(cmds[1]+".as")
+            deal_sal(cmds[1] + ".as")
         if cmds[0] == "exit":
             sys.exit()
 
@@ -138,4 +138,3 @@ if __name__ == "__main__":
         deal_sal(sys.argv[1])
     else:
         console()
-
