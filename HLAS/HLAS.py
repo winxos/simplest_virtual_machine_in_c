@@ -31,7 +31,7 @@ keywords = {
     "slp": 0x17,
     "ret": 0x18,
 };
-single_operators = {"inc", "dec", "halt", "push", "pop", "ret"}
+single_operators = {"inc", "dec", "halt", "push", "pop", "ret", "add", "sub", "mul", "div", "and", "or", "xor"}
 var_table = {}
 label_table = {}
 
