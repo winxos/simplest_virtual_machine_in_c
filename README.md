@@ -1,3 +1,3 @@
 # HLVM
-An abstruct interpreter implement,
+An abstract interpreter implement,
 use in the embedded platform such as arduino, cortex-m
