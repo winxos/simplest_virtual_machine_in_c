@@ -13,13 +13,13 @@ The code can transplant to platform such as arduino, cortex-m easily.
 
 Project include a shell, can input and run machine code directly also can load machine code in *.vm file
 
-![1](.\images\1.PNG)
+![1](./images/1.PNG)
 
-![3](.\images\3.PNG)
+![3](./images/3.PNG)
 
 
 
-![2](.\images\2.PNG)
+![2](./images/2.PNG)
 
 HLVM can display and run the vm code in a different frequency, so you can see the code running directly.
 
@@ -27,15 +27,15 @@ HLVM can display and run the vm code in a different frequency, so you can see th
 
 The folder HLAS provide a assembly tool for HLVM, wrote in python 3.7,  design an assembly language for HLVM, can convert the assembly code from *.as file to *.vm machine code.
 
-![5](.\images\5.PNG)
+![5](./images/5.PNG)
 
 Assembly tool.
 
-![6](.\images\6.PNG)
+![6](./images/6.PNG)
 
 The assembly language.
 
-![4](.\images\4.PNG)
+![4](./images/4.PNG)
 
 The machine code.
 
